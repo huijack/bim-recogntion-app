@@ -1,7 +1,6 @@
 import { TbMoon, TbSun } from 'react-icons/tb'
 import { HiMenuAlt1 } from 'react-icons/hi'
 import { NavLink } from 'react-router-dom'
-import LogoBlack from '../assets/LogoBlack.svg'
 import NavLinks from './NavLinks'
 import { useTheme, themes } from '../context'
 

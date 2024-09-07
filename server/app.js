@@ -1,15 +1,31 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
-const { landing, news } = require('./data')
+const landing = require('./routes/landing')
+const sessions = require('./routes/sessions')
+const connectDB = require('./db/connect')
+require('dotenv').config()
 
-app.get('/api/landing', (req, res) => {
-  res.json(landing)
-})
+// cors
+app.use(cors())
 
-app.get('/api/news', (req, res) => {
-  res.json(news)
-})
+// middleware
+app.use(express.json())
 
-app.listen(5000, () => {
-  console.log('Server is listening on port 5000...')
-})
+app.use('/api/v1/landing', landing)
+app.use('/api/v1/sessions', sessions)
+
+const port = process.env.PORT || 3000
+
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI)
+    app.listen(port, () =>
+      console.log(`Server is listening on port ${port}...`)
+    )
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+start()

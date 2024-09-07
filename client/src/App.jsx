@@ -11,6 +11,10 @@ import {
   SingleSession,
 } from './pages'
 import { ThemeProvider } from './context'
+import { ErrorElement } from './components'
+
+// loader
+import { loader as landingLoader } from './pages/Landing'
 
 const router = createBrowserRouter([
   {
@@ -21,6 +25,8 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing />,
+        loader: landingLoader,
+        errorElement: ErrorElement,
       },
       {
         path: 'session',
