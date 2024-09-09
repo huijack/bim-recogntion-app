@@ -6,7 +6,6 @@ day.extend(advancedFormat)
 
 const NewsCard = () => {
   const { news } = useLoaderData()
-  console.log(news)
 
   return (
     <section className="pt-24">

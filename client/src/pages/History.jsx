@@ -1,4 +1,10 @@
+import { SectionTitle } from '../components'
+
 const History = () => {
-  return <div>History</div>
+  return (
+    <>
+      <SectionTitle text="past sessions" />
+    </>
+  )
 }
 export default History
