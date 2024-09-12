@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react'
-import LogoBlack from './assets/LogoBlack.svg'
-import LogoWhite from './assets/LogoWhite.svg'
+import LogoBlack from '../assets/LogoBlack.svg'
+import LogoWhite from '../assets/LogoWhite.svg'
 
 const ThemeContext = createContext()
 

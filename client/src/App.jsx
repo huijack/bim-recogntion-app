@@ -10,7 +10,7 @@ import {
   Profile,
   SingleSession,
 } from './pages'
-import { ThemeProvider } from './context'
+import { ThemeProvider } from '../src/utils/context'
 import { ErrorElement } from './components'
 
 // loader

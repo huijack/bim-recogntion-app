@@ -3,9 +3,8 @@ import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-const DateChoose = ({ label, name, size }) => {
+const TimeChoose = ({ label, name, size }) => {
   const [startDate, setStartDate] = useState(new Date())
-
   return (
     <div className="form-control">
       <label className="label">
@@ -13,15 +12,17 @@ const DateChoose = ({ label, name, size }) => {
       </label>
       <DatePicker
         className={`input input-bordered w-full ${size}`}
-        dateFormat="dd/MM/yyyy"
+        showTimeSelect
+        showTimeSelectOnly
+        timeIntervals={15}
+        timeCaption="Time"
+        dateFormat="h:mm aa"
         name={name}
         id={name}
-        maxDate={new Date()}
         selected={startDate}
         onChange={(date) => setStartDate(date)}
-        showYearDropdown
       />
     </div>
   )
 }
-export default DateChoose
+export default TimeChoose
