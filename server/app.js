@@ -4,24 +4,34 @@ require('express-async-errors')
 const express = require('express')
 const cors = require('cors')
 const app = express()
-const landing = require('./routes/landing')
-const sessions = require('./routes/sessions')
+
+// connectDB
+const connectDB = require('./db/connect')
+
+const authenticateUser = require('./middleware/authentication')
+// routers
+const authRouter = require('./routes/auth')
+const landingRouter = require('./routes/landing')
+const sessionsRouter = require('./routes/sessions')
+const profileRouter = require('./routes/profile')
+
+// error handler
 const notFoundMiddleware = require('./middleware/not-found')
 const errorMiddleware = require('./middleware/error-handler')
-const connectDB = require('./db/connect')
 
 // cors
 app.use(cors())
-
-// middleware
 app.use(express.json())
 
 app.get('/', (req, res) => {
-  res.send(`<h1>SignMana API</h1><a href="/api/v1/sessions">sessions route</a>`)
+  res.send(`<h1>SignMana API</h1>`)
 })
 
-app.use('/api/v1/landing', landing)
-app.use('/api/v1/sessions', sessions)
+// routes
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/landing', landingRouter)
+app.use('/api/v1/sessions', authenticateUser, sessionsRouter)
+app.use('/api/v1/profile', authenticateUser, profileRouter)
 
 app.use(notFoundMiddleware)
 app.use(errorMiddleware)

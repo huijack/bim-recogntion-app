@@ -4,13 +4,18 @@ const SessionSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'must provide a session name'],
+      required: [true, 'Please provide a session name'],
       trim: true,
-      maxlength: [20, 'cannot be more than 20 characters'],
+      maxlength: 20,
     },
-    textOutputs: {
-      type: String,
-      trim: true,
+    score: {
+      type: Number,
+      default: 0,
+    },
+    createdBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'Please provide a user'],
     },
   },
   { timestamps: true }
