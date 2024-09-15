@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useTheme } from '../utils/context'
+import { useTheme } from '../utils/ThemeContext'
 import { FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa'
 
 const Footer = () => {

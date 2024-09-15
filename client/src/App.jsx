@@ -10,11 +10,16 @@ import {
   Profile,
   SingleSession,
 } from './pages'
-import { ThemeProvider } from '../src/utils/context'
-import { ErrorElement } from './components'
+import { ThemeProvider } from './utils/ThemeContext'
+import { AuthProvider } from './utils/AuthContext'
+import { ErrorElement, PrivateRoute } from './components'
 
 // loader
 import { loader as landingLoader } from './pages/Landing'
+
+// action
+import { action as loginAction } from './pages/Login'
+import { action as registerAction } from './pages/Register'
 
 const router = createBrowserRouter([
   {
@@ -30,19 +35,35 @@ const router = createBrowserRouter([
       },
       {
         path: 'session',
-        element: <Session />,
+        element: (
+          <PrivateRoute>
+            <Session />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'session/:id',
-        element: <SingleSession />,
+        element: (
+          <PrivateRoute>
+            <SingleSession />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'history',
-        element: <History />,
+        element: (
+          <PrivateRoute>
+            <History />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'profile',
-        element: <Profile />,
+        element: (
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        ),
         errorElement: ErrorElement,
       },
     ],
@@ -51,19 +72,23 @@ const router = createBrowserRouter([
     path: '/login',
     element: <Login />,
     errorElement: <Error />,
+    action: loginAction,
   },
   {
     path: '/register',
     element: <Register />,
     errorElement: <Error />,
+    action: registerAction,
   },
 ])
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </AuthProvider>
   )
 }
 export default App

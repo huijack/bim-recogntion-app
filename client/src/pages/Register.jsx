@@ -1,5 +1,20 @@
-import { Form, Link } from 'react-router-dom'
+import { Form, Link, redirect } from 'react-router-dom'
 import { FormInput, SubmitBtn } from '../components'
+import { customFetch } from '../utils'
+import { toast } from 'react-toastify'
+
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const data = Object.fromEntries(formData)
+  try {
+    await customFetch.post('/auth/register', data)
+    toast.success('Registration successful')
+    return redirect('/login')
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+  }
+}
 
 const Register = () => {
   return (
@@ -18,7 +33,7 @@ const Register = () => {
           className="mt-3 card w-[28rem] p-10 bg-base-100 shadow-lg flex flex-col gap-y-4"
         >
           <FormInput type="text" label="username" name="username" />
-          <FormInput type="email" label="email" name="identifier" />
+          <FormInput type="email" label="email" name="email" />
           <FormInput type="password" label="password" name="password" />
           <div className="-mt-1 form-control">
             <label className="label cursor-pointer justify-normal gap-x-4">

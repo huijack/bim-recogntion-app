@@ -2,7 +2,7 @@ import { TbMoon, TbSun } from 'react-icons/tb'
 import { HiMenuAlt1 } from 'react-icons/hi'
 import { NavLink } from 'react-router-dom'
 import NavLinks from './NavLinks'
-import { useTheme, themes } from '../utils/context'
+import { useTheme, themes } from '../utils/ThemeContext'
 
 const Navbar = () => {
   const { theme, toggleTheme, changeLogo } = useTheme()

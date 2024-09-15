@@ -42,15 +42,13 @@ const updateProfile = async (req, res) => {
 
   let user = await User.findById(userId)
 
-  // update name and email
+  // update name, email and additional notes
   user.username = username
   user.email = email
+  user.additionalNotes = additionalNotes || ''
 
   if (dateOfBirth !== undefined) {
     user.dateOfBirth = dateOfBirth || null
-  }
-  if (additionalNotes !== undefined) {
-    user.additionalNotes = additionalNotes || ''
   }
 
   // update password

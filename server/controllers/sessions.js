@@ -30,7 +30,23 @@ const createSession = async (req, res) => {
 }
 
 const updateSession = async (req, res) => {
-  res.send('update session')
+  const {
+    body: { score },
+    user: { userId },
+    params: { id: sessionID },
+  } = req
+
+  const session = await Session.findByIdAndUpdate(
+    { _id: sessionID, createdBy: userId },
+    { score },
+    { new: true, runValidators: true }
+  )
+
+  if (!session) {
+    throw new NotFoundError(`No session with id : ${sessionID}`)
+  }
+
+  res.status(StatusCodes.OK).json({ session })
 }
 
 const deleteSession = async (req, res) => {

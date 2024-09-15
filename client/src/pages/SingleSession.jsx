@@ -88,7 +88,7 @@ const SingleSession = () => {
           })
           .load({
             model: 'bim-recognition-x7qsz',
-            version: 7,
+            version: 9,
           })
         setIsLoading(false)
       } catch (error) {
