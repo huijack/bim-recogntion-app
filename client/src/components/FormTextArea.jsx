@@ -1,4 +1,11 @@
-const FormTextArea = ({ label, name, readonly, className, value }) => {
+const FormTextArea = ({
+  label,
+  name,
+  readonly,
+  className,
+  value,
+  defaultValue,
+}) => {
   return (
     <div className={`form-control ${className}`}>
       <label htmlFor={name} className="label">
@@ -10,6 +17,7 @@ const FormTextArea = ({ label, name, readonly, className, value }) => {
         className="textarea textarea-bordered textarea-lg resize-none"
         readOnly={readonly}
         value={value}
+        defaultValue={defaultValue}
       ></textarea>
     </div>
   )

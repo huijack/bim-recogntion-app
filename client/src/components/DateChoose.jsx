@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-const DateChoose = ({ label, name, size }) => {
+const DateChoose = ({ label, name, size, selectedDate }) => {
   const [startDate, setStartDate] = useState(new Date())
 
   return (
@@ -17,7 +17,7 @@ const DateChoose = ({ label, name, size }) => {
         name={name}
         id={name}
         maxDate={new Date()}
-        selected={startDate}
+        selected={selectedDate}
         onChange={(date) => setStartDate(date)}
         showYearDropdown
       />

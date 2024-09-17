@@ -2,7 +2,9 @@ const FormInput = ({ label, name, type, defaultValue, size }) => {
   return (
     <div className="form-control">
       <label className="label" htmlFor={name}>
-        <span className="label-text capitalize font-semibold">{label}</span>
+        <span className="label-text capitalize font-semibold">
+          {label || name}
+        </span>
       </label>
       <input
         type={type}

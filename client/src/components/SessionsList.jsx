@@ -1,38 +1,45 @@
 import { BsThreeDots } from 'react-icons/bs'
+import { useLoaderData } from 'react-router-dom'
+import day from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+day.extend(advancedFormat)
 
 const SessionsList = () => {
+  const { sessions } = useLoaderData()
+
+  const sessionsList = sessions.sessions
+  console.log(sessionsList)
+
   return (
     <div className="mt-4 overflow-x-auto">
       <table className="table table-zebra">
+        {/* HEAD */}
         <thead>
           <tr>
             <th>Session Name</th>
-            <th>Session Date</th>
-            <th>Session Time</th>
+            <th>Score</th>
+            <th>Date</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Session 1</td>
-            <td>01/01/2021</td>
-            <td>10:00</td>
-            <td>
-              <button className="btn btn-sm btn-circle btn-accent">
-                <BsThreeDots />
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>Session 2</td>
-            <td>02/01/2021</td>
-            <td>11:00</td>
-            <td>
-              <button className="btn btn-sm btn-circle btn-accent">
-                <BsThreeDots />
-              </button>
-            </td>
-          </tr>
+          {/* BODY */}
+          {sessionsList.map((session) => {
+            const { _id: id, name, score, createdAt } = session
+            const newDate = day(createdAt).format('hh:mm a - MMM Do, YYYY')
+            return (
+              <tr key={id}>
+                <td>{name}</td>
+                <td>{score.toString()}</td>
+                <td>{newDate}</td>
+                <td>
+                  <button className="btn btn-sm btn-circle btn-accent">
+                    <BsThreeDots />
+                  </button>
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>

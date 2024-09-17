@@ -6,9 +6,20 @@ import {
   ModalBtn,
   SectionTitle,
 } from '../components'
-import { Form } from 'react-router-dom'
+import { Form, useLoaderData } from 'react-router-dom'
+import { customFetch } from '../utils'
+
+const URL = '/profile'
+
+export const loader = async () => {
+  const response = await customFetch(URL)
+  const data = response.data
+  const { additionalNotes, dateOfBirth, email, username, password } = data.user
+  return { additionalNotes, dateOfBirth, email, username, password }
+}
 
 const Profile = () => {
+  const { additionalNotes, dateOfBirth, email, username } = useLoaderData()
   const formRef = useRef(null)
 
   const confirmUpdate = () => {
@@ -24,28 +35,31 @@ const Profile = () => {
         method="POST"
         ref={formRef}
       >
-        <section className="grid sm:grid-cols-2 gap-6 md:gap-x-20 md:gap-y-10 sm:justify-center md:justify-between">
+        <section className="grid sm:grid-cols-3 gap-6 md:gap-x-20 md:gap-y-10 sm:justify-center md:justify-between">
+          {/* PROFILE INFORMATION */}
           <FormInput
             label="your name"
             name="name"
             type="text"
-            defaultValue="John Doe"
+            defaultValue={username}
           />
           <FormInput
             label="email"
             name="email"
             type="email"
-            defaultValue="test@test.com"
+            defaultValue={email}
           />
-          <FormInput
-            label="password"
-            name="password"
-            type="password"
-            defaultValue="testing"
+          <DateChoose
+            label="Date of Birth"
+            name="date"
+            selectedDate={dateOfBirth}
           />
-          <DateChoose label="Date of Birth" name="date" />
         </section>
-        <FormTextArea label="additional notes" name="notes" />
+        <FormTextArea
+          label="additional notes"
+          name="notes"
+          defaultValue={additionalNotes}
+        />
         <div className="flex justify-end">
           <label
             htmlFor="open-modal"

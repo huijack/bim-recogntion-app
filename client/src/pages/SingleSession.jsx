@@ -1,9 +1,28 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { FormTextArea, SectionTitle } from '../components'
-import { Form } from 'react-router-dom'
+import { Form, useLoaderData, useParams } from 'react-router-dom'
 import Webcam from 'react-webcam'
+import { customFetch } from '../utils'
+import { toast } from 'react-toastify'
+
+export const loader = async ({ params }) => {
+  const { id } = params
+  console.log(id)
+
+  try {
+    const response = await customFetch(`/sessions/${id}`)
+    const data = response.data
+    const { name, score } = data.session
+    return { name, score }
+  } catch (error) {
+    console.log(`Error loading session: ${error}`)
+    toast.error('Failed to load the session. Please try again.')
+  }
+}
 
 const SingleSession = () => {
+  const { id } = useParams()
+  const { name, score } = useLoaderData()
   const webcamRef = useRef(null)
   const canvasRef = useRef(null)
   const detectFrameRef = useRef(null)
@@ -124,7 +143,7 @@ const SingleSession = () => {
 
   return (
     <>
-      <SectionTitle text={`Session name: #####`} />
+      <SectionTitle text={`Session name: ${name}`} />
       <div className="py-12 grid gap-y-10 place-items-center">
         <div className="relative sm:w-8/12 md:w-6/12">
           {isLoading ? (
