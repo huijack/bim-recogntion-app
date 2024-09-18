@@ -4,6 +4,7 @@ require('express-async-errors')
 const express = require('express')
 const cors = require('cors')
 const app = express()
+const morgan = require('morgan')
 
 // connectDB
 const connectDB = require('./db/connect')
@@ -18,6 +19,10 @@ const profileRouter = require('./routes/profile')
 // error handler
 const notFoundMiddleware = require('./middleware/not-found')
 const errorMiddleware = require('./middleware/error-handler')
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'))
+}
 
 // cors
 app.use(cors())

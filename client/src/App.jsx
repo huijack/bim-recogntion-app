@@ -24,6 +24,7 @@ import { loader as singleSessionLoader } from './pages/SingleSession'
 import { action as loginAction } from './pages/Login'
 import { action as registerAction } from './pages/Register'
 import { action as sessionAction } from './pages/Session'
+import { action as singleSessionAction } from './components/ControlButtons'
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
         path: 'session/:id',
         element: <SingleSession />,
         loader: singleSessionLoader,
+        action: singleSessionAction,
         errorElement: <ErrorElement />,
       },
       {

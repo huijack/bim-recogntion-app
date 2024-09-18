@@ -8,7 +8,6 @@ const SessionsList = () => {
   const { sessions } = useLoaderData()
 
   const sessionsList = sessions.sessions
-  console.log(sessionsList)
 
   return (
     <div className="mt-4 overflow-x-auto">

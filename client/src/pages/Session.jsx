@@ -1,6 +1,6 @@
-import { Form, Navigate, redirect } from 'react-router-dom'
+import { Form, redirect, useNavigate } from 'react-router-dom'
 import { FormInput, Loading, SectionTitle, WebCam } from '../components'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { customFetch } from '../utils'
 import { toast } from 'react-toastify'
 import { useAuth } from '../utils/AuthContext'
@@ -10,6 +10,7 @@ const URL = '/sessions'
 export const action = async ({ request }) => {
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
+
   try {
     const response = await customFetch.post(URL, data)
     toast.success('Session created successfully')
@@ -17,20 +18,24 @@ export const action = async ({ request }) => {
   } catch (error) {
     const errorMessage = error?.response?.data?.msg
     toast.error(errorMessage)
+    return redirect('/session')
   }
 }
 
 const Session = () => {
   const [isPermissionGranted, setIsPermissionGranted] = useState(null)
   const { user, token, isLoading } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!isLoading && (!user || !token)) {
+      toast.warn('You need to login to create a session')
+      navigate('/login')
+    }
+  }, [user, token, isLoading, navigate])
 
   if (isLoading) {
     return <Loading />
-  }
-
-  if (!user || !token) {
-    toast.warn('You need to login to create a session')
-    return <Navigate to="/login" replace />
   }
 
   return (

@@ -12,6 +12,11 @@ const SessionSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    status: {
+      type: String,
+      enum: ['active', 'completed'],
+      default: 'active',
+    },
     createdBy: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',

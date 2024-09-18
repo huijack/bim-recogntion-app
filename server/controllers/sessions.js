@@ -38,7 +38,7 @@ const updateSession = async (req, res) => {
 
   const session = await Session.findByIdAndUpdate(
     { _id: sessionID, createdBy: userId },
-    { score },
+    { score, status: 'completed' },
     { new: true, runValidators: true }
   )
 

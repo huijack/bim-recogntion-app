@@ -13,11 +13,11 @@ const ErrorElement = () => {
     }
   }, [user, token])
 
-  if (!user && !token) {
-    return <Navigate to="/login" replace />
-  }
-
   console.log(error)
+
+  if (error.status === 401) {
+    return <Navigate to="/login" />
+  }
 
   return (
     <>

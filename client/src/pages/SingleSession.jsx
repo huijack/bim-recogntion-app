@@ -1,204 +1,103 @@
-import { useRef, useState, useEffect, useCallback } from 'react'
-import { FormTextArea, SectionTitle } from '../components'
-import { Form, useLoaderData, useParams } from 'react-router-dom'
-import Webcam from 'react-webcam'
+import { useEffect, useState } from 'react'
+import {
+  SectionTitle,
+  WordDisplay,
+  DetectionCanvas,
+  ControlButtons,
+  WebCam,
+} from '../components'
+import { redirect, useLoaderData, useParams } from 'react-router-dom'
 import { customFetch } from '../utils'
+import { useDetection, useWordGame, useWebcam } from '../hooks'
 import { toast } from 'react-toastify'
 
 export const loader = async ({ params }) => {
   const { id } = params
-  console.log(id)
-
   try {
     const response = await customFetch(`/sessions/${id}`)
-    const data = response.data
-    const { name, score } = data.session
+    const { session } = response.data
+    const { name, score, status } = session
+
+    if (status === 'completed') {
+      toast.error('Session already completed.')
+      return redirect('/')
+    }
+
     return { name, score }
   } catch (error) {
     console.log(`Error loading session: ${error}`)
     toast.error('Failed to load the session. Please try again.')
+    return redirect('/')
   }
 }
 
 const SingleSession = () => {
   const { id } = useParams()
-  const { name, score } = useLoaderData()
-  const webcamRef = useRef(null)
-  const canvasRef = useRef(null)
-  const detectFrameRef = useRef(null)
-  const modelRef = useRef(null)
-  const [predictions, setPredictions] = useState([])
+  const { name, score: initialScore } = useLoaderData()
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [isDetecting, setIsDetecting] = useState(false)
-  const [detectedText, setDetectedText] = useState('')
 
-  const drawPredictions = (predictions, canvas) => {
-    const ctx = canvas.getContext('2d')
-    predictions.forEach((prediction) => {
-      const { x, y, width, height } = prediction.bbox
+  const {
+    webcamRef,
+    error,
+    isPermissionGranted,
+    setIsPermissionGranted,
+    handleUserMedia,
+    handleUserMediaError,
+  } = useWebcam(setIsLoading)
 
-      // Draw bounding box
-      ctx.strokeStyle = '#00FFFF'
-      ctx.lineWidth = 4
-      ctx.strokeRect(x - width / 2, y - height / 2, width, height)
-
-      // Draw label
-      ctx.fillStyle = '#00FFFF'
-      ctx.font = 'bold 18px Arial'
-      ctx.fillText(
-        `${prediction.class} (${Math.round(prediction.confidence * 100)}%)`,
-        x - width / 2,
-        y - height / 2 - 5
-      )
-    })
-  }
-
-  const detectFrame = useCallback(
-    async (model) => {
-      if (!isDetecting) return
-
-      if (webcamRef.current && canvasRef.current && model) {
-        const video = webcamRef.current.video
-        const canvas = canvasRef.current
-        const ctx = canvas.getContext('2d')
-
-        if (
-          video.readyState === video.HAVE_ENOUGH_DATA &&
-          video.videoWidth > 0 &&
-          video.videoHeight > 0
-        ) {
-          canvas.width = video.videoWidth
-          canvas.height = video.videoHeight
-          ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
-          try {
-            const results = await model.detect(canvas)
-            setPredictions(results)
-
-            const newDetectedText = results
-              .map((pred) => `${pred.class}`)
-              .join(', ')
-
-            setDetectedText((prevText) =>
-              prevText ? `${prevText}${newDetectedText}` : newDetectedText
-            )
-
-            drawPredictions(results, canvas)
-            // draw labelling bounding boxes
-          } catch (error) {
-            console.error(`Error during detection: ${error}`)
-            setError(
-              'An error occurred during detection. Please refresh and try again.'
-            )
-          }
-        }
-      }
-      detectFrameRef.current = requestAnimationFrame(() => detectFrame(model))
-    },
-    [isDetecting]
+  const { canvasRef, isDetecting, toggleDetection, predictions } = useDetection(
+    webcamRef,
+    setIsLoading
   )
+  const { currentWord, currentLetterIndex, score, checkDetectedLetter } =
+    useWordGame(initialScore)
 
   useEffect(() => {
-    const loadModel = async () => {
-      try {
-        modelRef.current = await window.roboflow
-          .auth({
-            publishable_key: import.meta.env.VITE_ROBOFLOW_PUBLISHABLE_KEY,
-          })
-          .load({
-            model: 'bim-recognition-x7qsz',
-            version: 9,
-          })
-        setIsLoading(false)
-      } catch (error) {
-        console.error(`Error loading model: ${error}`)
-        setError('Failed to load the model. Please try again.')
-        setIsLoading(false)
-      }
+    if (predictions.length > 0) {
+      const detectedClasses = predictions.map((pred) => pred.class)
+      checkDetectedLetter(detectedClasses)
     }
-
-    loadModel()
-
-    return () => {
-      if (detectFrameRef.current) {
-        cancelAnimationFrame(detectFrameRef.current)
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!error && isDetecting && modelRef.current) {
-      detectFrame(modelRef.current)
-    }
-    return () => {
-      if (detectFrameRef.current) {
-        cancelAnimationFrame(detectFrameRef.current)
-      }
-    }
-  }, [error, isDetecting, detectFrame])
-
-  const handleToggleDetection = () => {
-    setIsDetecting((prevState) => !prevState)
-  }
+  }, [predictions, checkDetectedLetter])
 
   return (
     <>
-      <SectionTitle text={`Session name: ${name}`} />
+      <SectionTitle text={`Session name: ${name}`} score={`Score: ${score}`} />
       <div className="py-12 grid gap-y-10 place-items-center">
         <div className="relative sm:w-8/12 md:w-6/12">
           {isLoading ? (
             <div className="h-96 bg-primary-content grid place-items-center rounded-xl">
               <span className="loading loading-spinner loading-lg text-primary"></span>
+              {error && <div className="text-error-content">{error}</div>}
             </div>
           ) : (
             <>
-              <Webcam
-                audio={false}
-                ref={webcamRef}
-                className="h-full w-full object-cover rounded-xl"
-                onUserMedia={() => setError(null)}
+              <WebCam
+                webcamRef={webcamRef}
+                onUserMedia={handleUserMedia}
+                onUserMediaError={handleUserMediaError}
+                isPermissionGranted={isPermissionGranted}
+                setIsPermissionGranted={setIsPermissionGranted}
               />
-              <canvas
-                ref={canvasRef}
-                className="absolute top-0 left-0 h-full w-full object-cover rounded-xl"
-                style={{ zIndex: 10 }}
-              />
+              <DetectionCanvas canvasRef={canvasRef} />
             </>
           )}
         </div>
 
-        {error && (
-          <div className="h-96 w-full bg-primary-content grid place-items-center rounded-xl">
-            <div className="bg-error text-error-content">{error}</div>
-          </div>
-        )}
+        <WordDisplay
+          currentWord={currentWord}
+          currentLetterIndex={currentLetterIndex}
+        />
 
-        <Form method="POST" className="grid gap-y-10 w-full place-items-center">
-          <div className="flex gap-x-4">
-            <button
-              type="button"
-              className="btn btn-primary capitalize"
-              onClick={handleToggleDetection}
-              disabled={isLoading}
-            >
-              {isDetecting ? 'stop detection' : 'start detection'}
-            </button>
-            <button type="submit" className="btn btn-accent capitalize">
-              end session
-            </button>
-          </div>
-
-          <FormTextArea
-            label="text output"
-            name="output"
-            readonly={true}
-            className="w-full md:w-6/12"
-            value={detectedText}
-          />
-        </Form>
+        <ControlButtons
+          isDetecting={isDetecting}
+          toggleDetection={toggleDetection}
+          isLoading={isLoading}
+          error={error}
+          sessionId={id}
+          score={score}
+        />
       </div>
     </>
   )
 }
-
 export default SingleSession

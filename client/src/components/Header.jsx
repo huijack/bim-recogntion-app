@@ -3,6 +3,12 @@ import { useAuth } from '../utils/AuthContext'
 
 const Header = () => {
   const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
 
   return (
     <header className="bg-neutral py-2 text-neutral-content">
@@ -14,7 +20,7 @@ const Header = () => {
               <p className="text-xs sm:text-sm">Hello, {user.username}</p>
               <button
                 className="btn btn-xs btn-outline btn-primary uppercase"
-                onClick={logout}
+                onClick={handleLogout}
               >
                 logout
               </button>
