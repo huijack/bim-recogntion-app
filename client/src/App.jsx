@@ -19,17 +19,21 @@ import { loader as landingLoader } from './pages/Landing'
 import { loader as profileLoader } from './pages/Profile'
 import { loader as historyLoader } from './pages/History'
 import { loader as singleSessionLoader } from './pages/SingleSession'
+import { loader as userLoader } from './components/Header'
 
 // action
 import { action as loginAction } from './pages/Login'
 import { action as registerAction } from './pages/Register'
 import { action as sessionAction } from './pages/Session'
 import { action as singleSessionAction } from './components/ControlButtons'
+import { action as profileAction } from './components/ModalBtn'
+import { action as deleteSessionAction } from './components/SessionsList'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <HomeLayout />,
+    loader: userLoader,
     errorElement: <Error />,
     children: [
       {
@@ -54,12 +58,14 @@ const router = createBrowserRouter([
         path: 'history',
         element: <History />,
         loader: historyLoader,
+        action: deleteSessionAction,
         errorElement: <ErrorElement />,
       },
       {
         path: 'profile',
         element: <Profile />,
         loader: profileLoader,
+        action: profileAction,
         errorElement: <ErrorElement />,
       },
     ],

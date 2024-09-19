@@ -28,13 +28,13 @@ const links = [
 ]
 
 const NavLinks = () => {
-  const { user } = useAuth()
+  const { token } = useAuth()
   return (
     <>
       {links.map((link) => {
         const { id, url, text, protected: isProtected } = link
 
-        if (isProtected && !user) return null
+        if (isProtected && !token) return null
 
         return (
           <li key={id}>

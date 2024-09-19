@@ -37,7 +37,7 @@ const Register = () => {
           <FormInput type="password" label="password" name="password" />
           <div className="-mt-1 form-control">
             <label className="label cursor-pointer justify-normal gap-x-4">
-              <input type="checkbox" className="checkbox" />
+              <input type="checkbox" className="checkbox" required />
               <span className="label-text">I accept terms and conditions</span>
             </label>
           </div>

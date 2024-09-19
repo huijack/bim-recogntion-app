@@ -1,23 +1,37 @@
-import { Form, Link } from 'react-router-dom'
+import { Form, Link, useLoaderData } from 'react-router-dom'
 import FormInput from './FormInput'
 import DateChoose from './DateChoose'
-import TimeChoose from './TimeChoose'
 import FormSelect from './FormSelect'
+import { useState } from 'react'
 
 const Filters = () => {
+  const { params } = useLoaderData()
+  const { search, date, score, order } = params
+
   return (
     <Form className="my-10 bg-base-200 rounded-md px-8 py-4 grid gap-x-4 gap-y-6 sm:grid-cols-2 md:grid-cols-3 sm:items-center md:items-end">
       {/* SEARCH */}
-      <FormInput type="text" label="search session" name="search" />
+      <FormInput
+        type="search"
+        label="search session"
+        name="search"
+        defaultValue={search}
+      />
       {/* DATE SELECT */}
-      <DateChoose label="session date" name="date" />
-      {/* TIME SELECT */}
-      <TimeChoose label="session time" name="time" />
+      <DateChoose label="session date" name="date" selectedDate={date} />
+      {/* SCORE */}
+      <FormSelect
+        label="score"
+        name="score"
+        list={['highest', 'lowest']}
+        defaultValue={score}
+      />
       {/* ORDER */}
       <FormSelect
         label="sort by"
         name="order"
-        list={['a-z', 'z-a', 'newest', 'oldest']}
+        list={['a-z', 'z-a']}
+        defaultValue={order}
       />
       {/* BUTTONS */}
       <button type="submit" className="btn btn-primary uppercase">

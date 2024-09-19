@@ -13,7 +13,6 @@ export const action = async ({ request }) => {
     toast.success('Logged in successfully')
     return {
       success: true,
-      user: response.data.user,
       token: response.data.token,
     }
   } catch (error) {
@@ -32,7 +31,7 @@ const Login = () => {
   useEffect(() => {
     if (actionData) {
       if (actionData.success) {
-        login(actionData.user, actionData.token)
+        login(actionData.token)
         navigate('/')
       } else {
         toast.error(actionData.error)

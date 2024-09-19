@@ -1,9 +1,25 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLoaderData, useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
+import { getToken } from '../utils/auth'
+import { customFetch } from '../utils'
+
+export const loader = async () => {
+  const token = getToken()
+
+  try {
+    const response = await customFetch('/profile', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    return response.data.user
+  } catch (error) {
+    return null
+  }
+}
 
 const Header = () => {
-  const { user, logout } = useAuth()
+  const { logout } = useAuth()
   const navigate = useNavigate()
+  const user = useLoaderData()
 
   const handleLogout = () => {
     logout()

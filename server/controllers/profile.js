@@ -1,10 +1,6 @@
 const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
-const {
-  BadRequestError,
-  NotFoundError,
-  UnauthenticatedError,
-} = require('../errors')
+const { BadRequestError, NotFoundError } = require('../errors')
 
 const getProfile = async (req, res) => {
   const {
@@ -21,23 +17,12 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   const {
-    body: {
-      username,
-      email,
-      currentPassword,
-      newPassword,
-      dateOfBirth,
-      additionalNotes,
-    },
+    body: { username, email, dateOfBirth, additionalNotes },
     user: { userId },
   } = req
 
   if (username === '' || email === '') {
     throw new BadRequestError('Name and email fields cannot be empty')
-  }
-
-  if ((currentPassword && !newPassword) || (!currentPassword && newPassword)) {
-    throw new BadRequestError('Please provide both current and new password')
   }
 
   let user = await User.findById(userId)
@@ -49,15 +34,6 @@ const updateProfile = async (req, res) => {
 
   if (dateOfBirth !== undefined) {
     user.dateOfBirth = dateOfBirth || null
-  }
-
-  // update password
-  if (currentPassword && newPassword) {
-    const isPasswordCorrect = await user.comparePassword(currentPassword)
-    if (!isPasswordCorrect) {
-      throw new UnauthenticatedError('Invalid password')
-    }
-    user.password = newPassword
   }
 
   // save newly updated user

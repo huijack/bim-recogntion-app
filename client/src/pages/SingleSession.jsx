@@ -61,7 +61,7 @@ const SingleSession = () => {
 
   return (
     <>
-      <SectionTitle text={`Session name: ${name}`} score={`Score: ${score}`} />
+      <SectionTitle text={`Session name: ${name}`} />
       <div className="py-12 grid gap-y-10 place-items-center">
         <div className="relative sm:w-8/12 md:w-6/12">
           {isLoading ? (
@@ -86,6 +86,7 @@ const SingleSession = () => {
         <WordDisplay
           currentWord={currentWord}
           currentLetterIndex={currentLetterIndex}
+          score={score}
         />
 
         <ControlButtons
