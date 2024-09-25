@@ -5,20 +5,26 @@ import {
   ModalBtn,
   SectionTitle,
 } from '../components'
-import { Form, useLoaderData } from 'react-router-dom'
+import { Form, redirect, useLoaderData } from 'react-router-dom'
 import { customFetch } from '../utils'
+import { getToken } from '../utils/auth'
+import { toast } from 'react-toastify'
 
-const URL = '/profile'
+const URL = '/users/current-user'
 
 export const loader = async () => {
-  const response = await customFetch(URL)
-  const data = response.data
-  const { additionalNotes, dateOfBirth, email, username } = data.user
-  return { additionalNotes, dateOfBirth, email, username }
+  const token = getToken()
+  if (!token) {
+    toast.warning('Please log in to access this page.')
+    return redirect('/login')
+  }
+  const { data } = await customFetch(URL)
+  return data
 }
 
 const Profile = () => {
-  const { additionalNotes, dateOfBirth, email, username } = useLoaderData()
+  const data = useLoaderData()
+  const { username, email, dateOfBirth, additionalNotes } = data.user
 
   return (
     <>

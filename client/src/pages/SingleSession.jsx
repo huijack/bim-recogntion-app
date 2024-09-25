@@ -10,8 +10,14 @@ import { redirect, useLoaderData, useParams } from 'react-router-dom'
 import { customFetch } from '../utils'
 import { useDetection, useWordGame, useWebcam } from '../hooks'
 import { toast } from 'react-toastify'
+import { getToken } from '../utils/auth'
 
 export const loader = async ({ params }) => {
+  const token = getToken()
+  if (!token) {
+    toast.warning('Please log in to access this page.')
+    return redirect('/login')
+  }
   const { id } = params
   try {
     const response = await customFetch(`/sessions/${id}`)
@@ -25,8 +31,7 @@ export const loader = async ({ params }) => {
 
     return { name, score }
   } catch (error) {
-    console.log(`Error loading session: ${error}`)
-    toast.error('Failed to load the session. Please try again.')
+    toast.error('Session not found.')
     return redirect('/')
   }
 }

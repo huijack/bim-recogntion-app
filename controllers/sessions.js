@@ -3,10 +3,61 @@ const { StatusCodes } = require('http-status-codes')
 const { NotFoundError } = require('../errors')
 
 const getAllSessions = async (req, res) => {
-  const sessions = await Session.find({ createdBy: req.user.userId }).sort(
-    'createdAt'
-  )
-  res.status(StatusCodes.OK).json({ sessions, count: sessions.length })
+  const { search, date, score, order } = req.query
+
+  const queryObject = {
+    createdBy: req.user.userId,
+  }
+
+  if (search) {
+    queryObject.$or = [{ name: { $regex: search, $options: 'i' } }]
+  }
+
+  if (date) {
+    const startDate = new Date(date)
+    const endDate = new Date(
+      new Date(date).setDate(new Date(date).getDate() + 1)
+    )
+
+    queryObject.createdAt = {
+      $gte: startDate,
+      $lt: endDate,
+    }
+  }
+
+  const scoreSort = {
+    highest: -1,
+    lowest: 1,
+  }
+
+  const scoreSortValue = scoreSort[score] || scoreSort.highest
+
+  const orderSort = {
+    'a-z': 1,
+    'z-a': -1,
+  }
+
+  const orderSortValue = orderSort[order] || orderSort['a-z']
+
+  // Combine sorting logic into a single object
+  const sortOptions = { score: scoreSortValue, name: orderSortValue }
+
+  // setup pagination
+  const page = Number(req.query.page) || 1
+  const limit = 5
+  const skip = (page - 1) * limit
+
+  const totalSessions = await Session.countDocuments(queryObject)
+  const pageCount = Math.ceil(totalSessions / limit)
+
+  const sessions = await Session.find(queryObject)
+    .sort(sortOptions) // Use combined sort options
+    .skip(skip)
+    .limit(limit)
+
+  res
+    .status(StatusCodes.OK)
+    .json({ sessions, currentPage: page, pageCount, totalSessions })
 }
 
 const getSession = async (req, res) => {

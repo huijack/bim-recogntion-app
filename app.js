@@ -5,18 +5,24 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const morgan = require('morgan')
+const cookieParser = require('cookie-parser')
+const helmet = require('helmet')
+const mongoSanitize = require('express-mongo-sanitize')
 
 // connectDB
 const connectDB = require('./db/connect')
 
-const authenticateUser = require('./middleware/authentication')
 // routers
 const authRouter = require('./routes/auth')
 const landingRouter = require('./routes/landing')
 const sessionsRouter = require('./routes/sessions')
-const profileRouter = require('./routes/profile')
+const userRouter = require('./routes/user')
 
-// error handler
+// public
+const path = require('path')
+
+// error handler & middleware
+const { authenticateUser } = require('./middleware/authentication')
 const notFoundMiddleware = require('./middleware/not-found')
 const errorMiddleware = require('./middleware/error-handler')
 
@@ -26,7 +32,11 @@ if (process.env.NODE_ENV === 'development') {
 
 // cors
 app.use(cors())
+app.use(express.static(path.resolve(__dirname, './client/dist')))
+app.use(cookieParser())
 app.use(express.json())
+app.use(helmet({ contentSecurityPolicy: false }))
+app.use(mongoSanitize())
 
 app.get('/', (req, res) => {
   res.send(`<h1>SignMana API</h1>`)
@@ -36,7 +46,11 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/landing', landingRouter)
 app.use('/api/v1/sessions', authenticateUser, sessionsRouter)
-app.use('/api/v1/profile', authenticateUser, profileRouter)
+app.use('/api/v1/users', authenticateUser, userRouter)
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/dist', 'index.html'))
+})
 
 app.use(notFoundMiddleware)
 app.use(errorMiddleware)
@@ -51,6 +65,7 @@ const start = async () => {
     )
   } catch (error) {
     console.log(error)
+    process.exit(1)
   }
 }
 

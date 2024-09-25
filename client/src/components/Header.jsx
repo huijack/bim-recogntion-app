@@ -1,28 +1,14 @@
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
-import { useAuth } from '../utils/AuthContext'
-import { getToken } from '../utils/auth'
-import { customFetch } from '../utils'
+import { clearAuthCredentials } from '../utils/auth'
+import { toast } from 'react-toastify'
 
-export const loader = async () => {
-  const token = getToken()
-
-  try {
-    const response = await customFetch('/profile', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    return response.data.user
-  } catch (error) {
-    return null
-  }
-}
-
-const Header = () => {
-  const { logout } = useAuth()
+const Header = ({ user, setUser }) => {
   const navigate = useNavigate()
-  const user = useLoaderData()
 
   const handleLogout = () => {
-    logout()
+    clearAuthCredentials()
+    setUser(null)
+    toast.success('Logging out...')
     navigate('/')
   }
 

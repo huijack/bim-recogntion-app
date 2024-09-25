@@ -1,44 +1,40 @@
-import { Form, Link, useActionData, useNavigate } from 'react-router-dom'
+import { Form, Link, redirect, useNavigate } from 'react-router-dom'
 import { FormInput, SubmitBtn } from '../components'
 import { customFetch } from '../utils'
 import { toast } from 'react-toastify'
-import { useAuth } from '../utils/AuthContext'
-import { useEffect } from 'react'
+import { setAuthCredentials } from '../utils/auth'
 
 export const action = async ({ request }) => {
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
+
   try {
     const response = await customFetch.post('/auth/login', data)
+    setAuthCredentials(response.data.token)
     toast.success('Logged in successfully')
-    return {
-      success: true,
-      token: response.data.token,
-    }
+    return redirect('/')
   } catch (error) {
-    return {
-      success: false,
-      error: error?.response?.data?.msg,
-    }
+    toast.error(error?.response?.data?.msg)
+    return null
   }
 }
 
 const Login = () => {
-  const { login } = useAuth()
   const navigate = useNavigate()
-  const actionData = useActionData()
-
-  useEffect(() => {
-    if (actionData) {
-      if (actionData.success) {
-        login(actionData.token)
-        navigate('/')
-      } else {
-        toast.error(actionData.error)
-      }
+  const loginDemoUser = async () => {
+    const data = {
+      email: 'test@test.com',
+      password: 'secret',
     }
-  }, [actionData, login, navigate])
-
+    try {
+      const response = await customFetch.post('/auth/login', data)
+      setAuthCredentials(response.data.token)
+      toast.success('Take a test drive...')
+      navigate('/')
+    } catch (error) {
+      toast.error(error?.response?.data?.msg)
+    }
+  }
   return (
     <section className="grid h-screen place-items-center">
       <div className="flex flex-col gap-y-2">
@@ -63,6 +59,13 @@ const Login = () => {
           <div className="mt-4">
             <SubmitBtn text="sign in" />
           </div>
+          <button
+            type="button"
+            className="btn btn-secondary btn-block uppercase"
+            onClick={loginDemoUser}
+          >
+            guest user
+          </button>
         </Form>
       </div>
     </section>

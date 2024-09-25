@@ -2,11 +2,10 @@ import { Form, Link, useLoaderData } from 'react-router-dom'
 import FormInput from './FormInput'
 import DateChoose from './DateChoose'
 import FormSelect from './FormSelect'
-import { useState } from 'react'
 
 const Filters = () => {
-  const { params } = useLoaderData()
-  const { search, date, score, order } = params
+  const { searchValues } = useLoaderData()
+  const { search, date, score, order } = searchValues
 
   return (
     <Form className="my-10 bg-base-200 rounded-md px-8 py-4 grid gap-x-4 gap-y-6 sm:grid-cols-2 md:grid-cols-3 sm:items-center md:items-end">

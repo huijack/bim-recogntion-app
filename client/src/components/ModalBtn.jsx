@@ -12,16 +12,14 @@ export const action = async ({ request }) => {
   }
 
   try {
-    const response = await customFetch.patch('/profile', data, {
-      headers: { Authorization: `Bearer ${getToken()}` },
-    })
+    const response = await customFetch.patch('/users/current-user', data)
     toast.success('Profile updated successfully.')
     return redirect('/profile')
   } catch (error) {
     const errorMessage =
       error?.response?.data?.msg || 'Failed to update profile.'
     toast.error(errorMessage)
-    return null
+    return error
   }
 }
 

@@ -4,9 +4,7 @@ import day from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 day.extend(advancedFormat)
 
-const NewsCard = () => {
-  const { news } = useLoaderData()
-
+const NewsCard = ({ news }) => {
   return (
     <section className="pt-24">
       <SectionTitle text="latest news and trends" />

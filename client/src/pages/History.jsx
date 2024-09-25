@@ -1,60 +1,44 @@
-import { Filters, SectionTitle, SessionsList } from '../components'
+import {
+  Filters,
+  PaginationContainer,
+  SectionTitle,
+  SessionsList,
+} from '../components'
 import { customFetch } from '../utils'
 import day from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
+import { redirect, useLoaderData } from 'react-router-dom'
+import { getToken } from '../utils/auth'
+import { toast } from 'react-toastify'
+import { createContext } from 'react'
 day.extend(advancedFormat)
 
 const url = '/sessions'
 
 export const loader = async ({ request }) => {
+  const token = getToken()
+  if (!token) {
+    toast.warning('Please log in to access this page.')
+    return redirect('/login')
+  }
   const params = Object.fromEntries([
     ...new URL(request.url).searchParams.entries(),
   ])
 
-  const response = await customFetch(url)
-  let sessions = response.data.sessions
-
-  // Filter search query
-  if (params.search) {
-    sessions = sessions.filter((session) =>
-      session.name.toLowerCase().includes(params.search.toLowerCase())
-    )
-  }
-
-  // Filter date
-  if (params.date) {
-    const paramDate = day(params.date).format('YYYY-MM-DD')
-    sessions = sessions.filter((session) => {
-      const sessionDate = day(session.createdAt).format('YYYY-MM-DD')
-      return sessionDate === paramDate
-    })
-  }
-
-  // Sort by score
-  if (params.score) {
-    sessions = sessions.sort((a, b) => {
-      return params.score === 'highest' ? b.score - a.score : a.score - b.score
-    })
-  }
-
-  // Sort by order
-  if (params.order) {
-    sessions = sessions.sort((a, b) => {
-      return params.order === 'a-z'
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name)
-    })
-  }
-
-  return { sessions, params }
+  const { data } = await customFetch.get(url, { params })
+  return { data, sessions: data.sessions, searchValues: { ...params } }
 }
 
 const History = () => {
+  const { data } = useLoaderData()
+  const { pageCount } = data
+
   return (
     <>
       <SectionTitle text="past sessions" />
       <Filters />
       <SessionsList />
+      {pageCount > 1 && <PaginationContainer />}
     </>
   )
 }

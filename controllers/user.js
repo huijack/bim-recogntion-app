@@ -2,7 +2,7 @@ const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 
-const getProfile = async (req, res) => {
+const getCurrentUser = async (req, res) => {
   const {
     user: { userId },
   } = req
@@ -12,10 +12,12 @@ const getProfile = async (req, res) => {
   if (!user) {
     throw new NotFoundError(`No user with id : ${userId}`)
   }
-  res.status(StatusCodes.OK).json({ user })
+  const userWithoutPassword = user.toJSON()
+
+  res.status(StatusCodes.OK).json({ user: userWithoutPassword })
 }
 
-const updateProfile = async (req, res) => {
+const updateUser = async (req, res) => {
   const {
     body: { username, email, dateOfBirth, additionalNotes },
     user: { userId },
@@ -39,14 +41,7 @@ const updateProfile = async (req, res) => {
   // save newly updated user
   await user.save()
 
-  res.status(StatusCodes.OK).json({
-    user: {
-      username: user.username,
-      email: user.email,
-      dateOfBirth: user.dateOfBirth,
-      additionalNotes: user.additionalNotes,
-    },
-  })
+  res.status(StatusCodes.OK).json({ msg: 'user updated' })
 }
 
-module.exports = { getProfile, updateProfile }
+module.exports = { getCurrentUser, updateUser }

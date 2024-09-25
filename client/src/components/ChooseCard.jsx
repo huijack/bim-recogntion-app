@@ -1,9 +1,6 @@
-import { useLoaderData } from 'react-router-dom'
 import SectionTitle from './SectionTitle'
 
-const ChooseCard = () => {
-  const { reasons } = useLoaderData()
-
+const ChooseCard = ({ reasons }) => {
   return (
     <section className="pt-24">
       <SectionTitle text="why choose SignMana" />

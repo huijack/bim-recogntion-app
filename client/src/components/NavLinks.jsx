@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../utils/AuthContext'
+import { getToken } from '../utils/auth'
 
 const links = [
   {
@@ -28,7 +28,7 @@ const links = [
 ]
 
 const NavLinks = () => {
-  const { token } = useAuth()
+  const token = getToken()
   return (
     <>
       {links.map((link) => {

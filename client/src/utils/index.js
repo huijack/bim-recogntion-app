@@ -1,10 +1,8 @@
 import axios from 'axios'
 import { getToken } from './auth'
 
-const serverUrl = 'http://localhost:3000/api/v1'
-
 export const customFetch = axios.create({
-  baseURL: serverUrl,
+  baseURL: '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },

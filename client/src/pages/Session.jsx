@@ -1,9 +1,8 @@
-import { Form, redirect, useNavigate, useLocation } from 'react-router-dom'
-import { FormInput, Loading, SectionTitle, WebCam } from '../components'
-import { useState, useEffect } from 'react'
+import { Form, redirect } from 'react-router-dom'
+import { FormInput, SectionTitle, WebCam } from '../components'
+import { useState } from 'react'
 import { customFetch } from '../utils'
 import { toast } from 'react-toastify'
-import { useAuth } from '../utils/AuthContext'
 
 const URL = '/sessions'
 
@@ -24,34 +23,6 @@ export const action = async ({ request }) => {
 
 const Session = () => {
   const [isPermissionGranted, setIsPermissionGranted] = useState(null)
-  const { token, isLoading } = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [shouldRedirect, setShouldRedirect] = useState(false)
-
-  useEffect(() => {
-    if (!isLoading && !token && !shouldRedirect) {
-      const from = location.pathname
-      if (from !== '/login') {
-        toast.warn('You need to login to create a session')
-        setShouldRedirect(true)
-      }
-    }
-  }, [token, isLoading, location, shouldRedirect])
-
-  useEffect(() => {
-    if (shouldRedirect) {
-      navigate('/login', { state: { from: location }, replace: true })
-    }
-  }, [shouldRedirect, navigate, location])
-
-  if (isLoading) {
-    return <Loading />
-  }
-
-  if (!token) {
-    return null
-  }
 
   return (
     <>
