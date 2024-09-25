@@ -38,10 +38,6 @@ app.use(express.json())
 app.use(helmet({ contentSecurityPolicy: false }))
 app.use(mongoSanitize())
 
-app.get('/', (req, res) => {
-  res.send(`<h1>SignMana API</h1>`)
-})
-
 // routes
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/landing', landingRouter)
