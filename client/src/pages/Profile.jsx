@@ -37,12 +37,14 @@ const Profile = () => {
             name="username"
             type="text"
             defaultValue={username}
+            required
           />
           <FormInput
             label="email"
             name="email"
             type="email"
             defaultValue={email}
+            required
           />
           <DateChoose
             label="Date of Birth"

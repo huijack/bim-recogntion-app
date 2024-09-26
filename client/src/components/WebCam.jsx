@@ -10,12 +10,6 @@ const WebCam = ({
   className = 'h-full w-full object-cover rounded-xl',
   errorMessage = 'Camera permission not granted. Please allow the camera option in your browser.',
 }) => {
-  const videoConstraints = {
-    width: 1280,
-    height: 720,
-    facingMode: 'user',
-  }
-
   const handleUserMedia = useCallback(() => {
     setIsPermissionGranted(true)
     if (onUserMedia) onUserMedia()
@@ -37,6 +31,7 @@ const WebCam = ({
           ref={webcamRef}
           onUserMedia={handleUserMedia}
           onUserMediaError={handleUserMediaError}
+          mirrored={true}
           className={className}
         />
       ) : (

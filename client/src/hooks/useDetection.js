@@ -18,13 +18,19 @@ const useDetection = (webcamRef, setIsLoading) => {
       ctx.lineWidth = 4
       ctx.strokeRect(x - width / 2, y - height / 2, width, height)
 
+      const text = `${prediction.class} (${Math.round(
+        prediction.confidence * 100
+      )}%)`
+
       ctx.fillStyle = '#00FFFF'
       ctx.font = 'bold 18px Arial'
-      ctx.fillText(
-        `${prediction.class} (${Math.round(prediction.confidence * 100)}%)`,
-        x - width / 2,
-        y - height / 2 - 5
-      )
+
+      ctx.save()
+
+      ctx.translate(x - width / 2, y - height / 2 - 5)
+      ctx.scale(-1, 1)
+      ctx.fillText(text, 0, 0)
+      ctx.restore()
     })
   }
 

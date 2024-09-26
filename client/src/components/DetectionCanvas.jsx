@@ -3,7 +3,7 @@ const DetectionCanvas = ({ canvasRef }) => {
     <canvas
       ref={canvasRef}
       className="absolute top-0 left-0 h-full w-full object-cover rounded-xl"
-      style={{ zIndex: 10 }}
+      style={{ zIndex: 10, transform: 'scaleX(-1)' }}
     />
   )
 }

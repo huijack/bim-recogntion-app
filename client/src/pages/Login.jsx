@@ -54,8 +54,13 @@ const Login = () => {
           method="POST"
           className="mt-3 card w-[28rem] p-10 bg-base-100 shadow-lg flex flex-col gap-y-4"
         >
-          <FormInput type="email" label="email" name="email" />
-          <FormInput type="password" label="password" name="password" />
+          <FormInput type="email" label="email" name="email" required />
+          <FormInput
+            type="password"
+            label="password"
+            name="password"
+            required
+          />
           <div className="mt-4">
             <SubmitBtn text="sign in" />
           </div>
