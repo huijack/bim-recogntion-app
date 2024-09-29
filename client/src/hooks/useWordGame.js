@@ -13,9 +13,14 @@ const useWordGame = (initialScore) => {
   const fetchRandomWord = useCallback(async () => {
     try {
       const response = await axios.get(
-        'https://random-word-api.herokuapp.com/word'
+        'https://api.api-ninjas.com/v1/randomword',
+        {
+          headers: {
+            'X-Api-Key': import.meta.env.VITE_API_NINJA_KEY,
+          },
+        }
       )
-      const word = response.data[0]
+      const word = response.data.word[0]
       setCurrentWord(word)
       setCurrentLetterIndex(0)
       setWordCompleted(false)
