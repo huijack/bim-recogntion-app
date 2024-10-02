@@ -21,7 +21,7 @@ const Register = () => {
     <section className="grid h-screen place-items-center">
       <div className="flex flex-col gap-y-2">
         <div className="text-center">
-          <h4 className="text-4xl font-bold text-primary">
+          <h4 className="text-3xl md:text-4xl font-bold text-primary">
             Create your account here!
           </h4>
           <p className="mt-3 text-secondary text-sm">
@@ -30,11 +30,16 @@ const Register = () => {
         </div>
         <Form
           method="POST"
-          className="mt-3 card w-[28rem] p-10 bg-base-100 shadow-lg flex flex-col gap-y-4"
+          className="mt-3 card w-[24rem] md:w-[28rem] p-8 md:p-10 bg-base-100 shadow-lg flex flex-col gap-y-4"
         >
-          <FormInput type="text" label="username" name="username" />
-          <FormInput type="email" label="email" name="email" />
-          <FormInput type="password" label="password" name="password" />
+          <FormInput type="text" label="username" name="username" required />
+          <FormInput type="email" label="email" name="email" required />
+          <FormInput
+            type="password"
+            label="password"
+            name="password"
+            required
+          />
           <div className="-mt-1 form-control">
             <label className="label cursor-pointer justify-normal gap-x-4">
               <input type="checkbox" className="checkbox" required />
@@ -47,7 +52,10 @@ const Register = () => {
           <div className="mt-1 text-center">
             <p className="text-sm capitalize">
               Already have an account?{' '}
-              <Link to="/login" className="font-semibold text-secondary">
+              <Link
+                to="/login"
+                className="link font-semibold link-secondary link-hover"
+              >
                 Login
               </Link>
             </p>

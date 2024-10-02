@@ -3,6 +3,7 @@ import { FormInput, SubmitBtn } from '../components'
 import { customFetch } from '../utils'
 import { toast } from 'react-toastify'
 import { setAuthCredentials } from '../utils/auth'
+import { useState } from 'react'
 
 export const action = async ({ request }) => {
   const formData = await request.formData()
@@ -21,7 +22,10 @@ export const action = async ({ request }) => {
 
 const Login = () => {
   const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const loginDemoUser = async () => {
+    setIsSubmitting(true)
     const data = {
       email: 'test@test.com',
       password: 'secret',
@@ -33,13 +37,17 @@ const Login = () => {
       navigate('/')
     } catch (error) {
       toast.error(error?.response?.data?.msg)
+    } finally {
+      setIsSubmitting(false)
     }
   }
   return (
     <section className="grid h-screen place-items-center">
       <div className="flex flex-col gap-y-2">
         <div className="text-center">
-          <h4 className="text-4xl font-bold text-primary">Welcome back!</h4>
+          <h4 className="text-3xl md:text-4xl font-bold text-primary">
+            Welcome back!
+          </h4>
           <p className="mt-3 text-secondary text-sm">
             Don't have an account yet?{' '}
             <Link
@@ -52,7 +60,7 @@ const Login = () => {
         </div>
         <Form
           method="POST"
-          className="mt-3 card w-[28rem] p-10 bg-base-100 shadow-lg flex flex-col gap-y-4"
+          className="mt-3 card w-[24rem] md:w-[28rem] p-8 md:p-10 bg-base-100 shadow-lg flex flex-col gap-y-4"
         >
           <FormInput type="email" label="email" name="email" required />
           <FormInput
@@ -68,8 +76,15 @@ const Login = () => {
             type="button"
             className="btn btn-secondary btn-block uppercase"
             onClick={loginDemoUser}
+            disabled={isSubmitting}
           >
-            guest user
+            {isSubmitting ? (
+              <span className="loading loading-spinner uppercase">
+                loading...
+              </span>
+            ) : (
+              'guest user'
+            )}
           </button>
         </Form>
       </div>

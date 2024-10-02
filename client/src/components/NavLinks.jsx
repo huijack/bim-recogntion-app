@@ -25,6 +25,12 @@ const links = [
     text: 'profile',
     protected: true,
   },
+  {
+    id: 5,
+    url: 'change-password',
+    text: 'change password',
+    protected: true,
+  },
 ]
 
 const NavLinks = () => {

@@ -11,9 +11,12 @@ import {
   Session,
   Profile,
   SingleSession,
+  ChangePassword,
 } from './pages'
 import { ThemeProvider } from './utils/ThemeContext'
 import { ErrorElement } from './components'
+import { getToken } from './utils/auth'
+import { toast } from 'react-toastify'
 
 // loader
 import { loader as landingLoader } from './pages/Landing'
@@ -29,8 +32,7 @@ import { action as sessionAction } from './pages/Session'
 import { action as singleSessionAction } from './components/ControlButtons'
 import { action as profileAction } from './components/ModalBtn'
 import { action as deleteSessionAction } from './pages/DeleteSession'
-import { getToken } from './utils/auth'
-import { toast } from 'react-toastify'
+import { action as changePasswordAction } from './pages/ChangePassword'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -89,6 +91,16 @@ const router = createBrowserRouter([
         element: <Profile />,
         loader: profileLoader,
         action: profileAction,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: 'change-password',
+        element: (
+          <ProtectedRoute>
+            <ChangePassword />
+          </ProtectedRoute>
+        ),
+        action: changePasswordAction,
         errorElement: <ErrorElement />,
       },
       {

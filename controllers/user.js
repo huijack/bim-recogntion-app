@@ -44,4 +44,29 @@ const updateUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'user updated' })
 }
 
-module.exports = { getCurrentUser, updateUser }
+const updatePassword = async (req, res) => {
+  const {
+    body: { newPassword, confirmPassword },
+    user: { userId },
+  } = req
+
+  if (newPassword !== confirmPassword) {
+    throw new BadRequestError('Passwords do not match')
+  }
+
+  let user = await User.findById(userId)
+
+  const isSamePassword = await user.comparePassword(newPassword)
+
+  if (isSamePassword) {
+    throw new BadRequestError('New password cannot be same as old password')
+  }
+
+  user.password = newPassword
+
+  await user.save()
+
+  res.status(StatusCodes.OK).json({ msg: 'user password updated' })
+}
+
+module.exports = { getCurrentUser, updateUser, updatePassword }
