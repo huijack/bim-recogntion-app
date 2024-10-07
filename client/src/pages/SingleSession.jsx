@@ -70,7 +70,7 @@ const SingleSession = () => {
       <div className="py-12 grid gap-y-10 place-items-center">
         <div className="relative sm:w-8/12 md:w-6/12">
           {isLoading ? (
-            <div className="h-96 bg-primary-content grid place-items-center rounded-xl">
+            <div className="h-72 w-72 sm:h-96 sm:w-auto bg-primary-content grid place-items-center rounded-xl">
               <span className="loading loading-spinner loading-lg text-primary"></span>
               {error && <div className="text-error-content">{error}</div>}
             </div>

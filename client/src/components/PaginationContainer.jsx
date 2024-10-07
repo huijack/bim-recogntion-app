@@ -17,7 +17,7 @@ const PaginationContainer = () => {
     return (
       <button
         key={pageNumber}
-        className={`btn btn-xs sm:btn-md border-none join-item ${
+        className={`btn btn-sm sm:btn-md border-none join-item ${
           activeClass ? 'bg-base-300 border-base-300' : ''
         }`}
         onClick={() => handlePageChange(pageNumber)}
@@ -37,7 +37,7 @@ const PaginationContainer = () => {
     // first dot
     if (currentPage > 2) {
       pageButtons.push(
-        <button className="join-item btn btn-xs sm:btn-md" key="dots-1">
+        <button className="join-item btn btn-sm sm:btn-md" key="dots-1">
           ...
         </button>
       )
@@ -53,7 +53,7 @@ const PaginationContainer = () => {
     // last dot
     if (currentPage < pageCount - 1) {
       pageButtons.push(
-        <button className="join-item btn btn-xs sm:btn-md" key="dots-1">
+        <button className="join-item btn btn-sm sm:btn-md" key="dots-2">
           ...
         </button>
       )
@@ -77,7 +77,7 @@ const PaginationContainer = () => {
       <div className="join">
         <button
           type="button"
-          className="btn btn-xs sm:btn-md join-item uppercase"
+          className="btn btn-sm sm:btn-md join-item uppercase"
           onClick={() => {
             let prevPage = currentPage - 1
             if (prevPage < 1) prevPage = pageCount
@@ -89,7 +89,7 @@ const PaginationContainer = () => {
         {renderPageButtons()}
         <button
           type="button"
-          className="btn btn-xs sm:btn-md join-item uppercase"
+          className="btn btn-sm sm:btn-md join-item uppercase"
           onClick={() => {
             let nextPage = currentPage + 1
             if (nextPage > pageCount) nextPage = 1

@@ -36,35 +36,37 @@ const ControlButtons = ({
   return (
     <Form
       method="PATCH"
-      className="grid grid-cols-2 gap-y-10 place-items-center"
+      className="grid grid-cols-2 sm:grid-cols-[auto_auto_1fr] gap-4 place-items-center"
     >
       <input type="hidden" name="score" value={score} />
-      <div className="flex gap-x-4">
-        <button
-          type="button"
-          className="btn btn-primary capitalize"
-          onClick={toggleDetection}
-          disabled={isLoading || error}
-        >
-          {isDetecting ? 'Stop Detection' : 'Start Detection'}
-        </button>
-        <button type="submit" className="btn btn-secondary capitalize">
-          End Session
-        </button>
-      </div>
-      <div className="flex justify-center">
-        <label htmlFor="image-modal" className="btn btn-accent">
-          Show BIM Alphabet <BsCardImage className="w-4 h-4" />
-        </label>
-        <input type="checkbox" id="image-modal" className="modal-toggle" />
-        <div className="modal" role="dialog">
-          <div className="modal-box">
-            <img src={bimImage} alt="BIM Alphabets" />
-          </div>
-          <label className="modal-backdrop" htmlFor="image-modal">
-            Close
-          </label>
+      <button
+        type="button"
+        className="btn btn-sm sm:btn-md text-sm sm:text-base btn-primary capitalize"
+        onClick={toggleDetection}
+        disabled={isLoading || error}
+      >
+        {isDetecting ? 'Stop Detection' : 'Start Detection'}
+      </button>
+      <button
+        type="submit"
+        className="btn btn-sm sm:btn-md text-sm sm:text-base btn-secondary capitalize"
+      >
+        End Session
+      </button>
+      <label
+        htmlFor="image-modal"
+        className="btn btn-sm sm:btn-md text-sm sm:text-base btn-accent col-span-2 sm:col-span-1"
+      >
+        Show BIM Alphabet <BsCardImage className="w-4 h-4" />
+      </label>
+      <input type="checkbox" id="image-modal" className="modal-toggle" />
+      <div className="modal" role="dialog">
+        <div className="modal-box">
+          <img src={bimImage} alt="BIM Alphabets" />
         </div>
+        <label className="modal-backdrop" htmlFor="image-modal">
+          Close
+        </label>
       </div>
     </Form>
   )

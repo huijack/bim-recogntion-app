@@ -42,10 +42,13 @@ const SessionsList = () => {
                     <td className="capitalize">{status}</td>
                     <td>
                       <Form method="POST" action={`../delete-session/${id}`}>
-                        <button type="submit" className="btn btn-sm btn-error">
+                        <button
+                          type="submit"
+                          className="gap-x-1 btn btn-xs sm:btn-sm btn-error flex-nowrap "
+                        >
                           <input type="hidden" name="id" value={id} />
-                          Delete
-                          <MdOutlineDelete className="h-5 w-5" />
+                          <span className="text-xs sm:text-sm">Delete</span>
+                          <MdOutlineDelete className="h-4 w-4 sm:h-5 sm:w-5" />
                         </button>
                       </Form>
                     </td>

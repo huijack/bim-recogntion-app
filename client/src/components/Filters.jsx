@@ -8,7 +8,7 @@ const Filters = () => {
   const { search, date, score, order } = searchValues
 
   return (
-    <Form className="my-10 bg-base-200 rounded-md px-8 py-4 grid gap-x-4 gap-y-6 sm:grid-cols-2 md:grid-cols-3 sm:items-center md:items-end">
+    <Form className="my-10 bg-base-200 rounded-md px-6 sm:px-8 py-4 grid gap-x-4 gap-y-6 sm:grid-cols-2 md:grid-cols-3 sm:items-center md:items-end">
       {/* SEARCH */}
       <FormInput
         type="search"

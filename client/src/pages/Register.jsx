@@ -30,7 +30,7 @@ const Register = () => {
         </div>
         <Form
           method="POST"
-          className="mt-3 card w-[24rem] md:w-[28rem] p-8 md:p-10 bg-base-100 shadow-lg flex flex-col gap-y-4"
+          className="mt-3 card w-[22rem] mx-3 md:mx-0 md:w-[28rem] p-8 md:p-10 bg-base-100 shadow-lg flex flex-col gap-y-4"
         >
           <FormInput type="text" label="username" name="username" required />
           <FormInput type="email" label="email" name="email" required />
