@@ -17,6 +17,7 @@ const authRouter = require('./routes/auth')
 const landingRouter = require('./routes/landing')
 const sessionsRouter = require('./routes/sessions')
 const userRouter = require('./routes/user')
+const alphabetsRouter = require('./routes/alphabets')
 
 // public
 const path = require('path')
@@ -40,6 +41,7 @@ app.use(mongoSanitize())
 // routes
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/landing', landingRouter)
+app.use('/api/v1/alphabets', alphabetsRouter)
 app.use('/api/v1/sessions', authenticateUser, sessionsRouter)
 app.use('/api/v1/users', authenticateUser, userRouter)
 

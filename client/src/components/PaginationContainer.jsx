@@ -1,76 +1,20 @@
 import { useLoaderData, useLocation, useNavigate } from 'react-router-dom'
 
 const PaginationContainer = () => {
-  const { sessions, data } = useLoaderData()
+  const { data } = useLoaderData()
   const { currentPage, pageCount } = data
-
-  const { pathname, search } = useLocation()
+  const pages = Array.from({ length: pageCount }, (_, index) => {
+    return index + 1
+  })
+  const { search, pathname } = useLocation()
   const navigate = useNavigate()
-
   const handlePageChange = (pageNumber) => {
     const searchParams = new URLSearchParams(search)
     searchParams.set('page', pageNumber)
     navigate(`${pathname}?${searchParams.toString()}`)
   }
 
-  const addPageButton = ({ pageNumber, activeClass }) => {
-    return (
-      <button
-        key={pageNumber}
-        className={`btn btn-sm sm:btn-md border-none join-item ${
-          activeClass ? 'bg-base-300 border-base-300' : ''
-        }`}
-        onClick={() => handlePageChange(pageNumber)}
-      >
-        {pageNumber}
-      </button>
-    )
-  }
-
-  const renderPageButtons = () => {
-    const pageButtons = []
-    // first button
-    pageButtons.push(
-      addPageButton({ pageNumber: 1, activeClass: currentPage === 1 })
-    )
-
-    // first dot
-    if (currentPage > 2) {
-      pageButtons.push(
-        <button className="join-item btn btn-sm sm:btn-md" key="dots-1">
-          ...
-        </button>
-      )
-    }
-
-    // active/current page
-    if (currentPage != 1 && currentPage != pageCount) {
-      pageButtons.push(
-        addPageButton({ pageNumber: currentPage, activeClass: true })
-      )
-    }
-
-    // last dot
-    if (currentPage < pageCount - 1) {
-      pageButtons.push(
-        <button className="join-item btn btn-sm sm:btn-md" key="dots-2">
-          ...
-        </button>
-      )
-    }
-
-    // last button
-    pageButtons.push(
-      addPageButton({
-        pageNumber: pageCount,
-        activeClass: currentPage === pageCount,
-      })
-    )
-
-    return pageButtons
-  }
-
-  if (pageCount < 2 || sessions.length === 0) return null
+  if (pageCount < 2) return null
 
   return (
     <div className="mt-16 flex justify-end">
@@ -86,7 +30,19 @@ const PaginationContainer = () => {
         >
           Prev
         </button>
-        {renderPageButtons()}
+        {pages.map((pageNumber) => {
+          return (
+            <button
+              key={pageNumber}
+              className={`btn btn-sm sm:btn-md border-none join-item ${
+                pageNumber === currentPage ? 'bg-base-300 border-base-300' : ''
+              }`}
+              onClick={() => handlePageChange(pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          )
+        })}
         <button
           type="button"
           className="btn btn-sm sm:btn-md join-item uppercase"

@@ -3,10 +3,16 @@ import { FormInput, SectionTitle, WebCam } from '../components'
 import { useState } from 'react'
 import { customFetch } from '../utils'
 import { toast } from 'react-toastify'
+import { getToken } from '../utils/auth'
 
 const URL = '/sessions'
 
 export const action = async ({ request }) => {
+  const token = getToken()
+  if (!token) {
+    toast.warning('Please log in to access this page.')
+    return redirect('/login')
+  }
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
 

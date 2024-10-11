@@ -12,6 +12,8 @@ import {
   Profile,
   SingleSession,
   ChangePassword,
+  Alphabets,
+  SingleAlphabet,
 } from './pages'
 import { ThemeProvider } from './utils/ThemeContext'
 import { ErrorElement } from './components'
@@ -24,6 +26,8 @@ import { loader as historyLoader } from './pages/History'
 import { loader as singleSessionLoader } from './pages/SingleSession'
 import { loader as homeLayoutLoader } from './pages/HomeLayout'
 import { loader as profileLoader } from './pages/Profile'
+import { loader as alphabetsLoader } from './pages/Alphabets'
+import { loader as singleAlphabetLoader } from './pages/SingleAlphabet'
 
 // action
 import { action as loginAction } from './pages/Login'
@@ -66,11 +70,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'session',
-        element: (
-          <ProtectedRoute>
-            <Session />
-          </ProtectedRoute>
-        ),
+        element: <Session />,
         action: sessionAction,
       },
       {
@@ -78,6 +78,18 @@ const router = createBrowserRouter([
         element: <SingleSession />,
         loader: singleSessionLoader,
         action: singleSessionAction,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: 'alphabets',
+        element: <Alphabets />,
+        loader: alphabetsLoader,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: 'alphabets/:id',
+        element: <SingleAlphabet />,
+        loader: singleAlphabetLoader,
         errorElement: <ErrorElement />,
       },
       {

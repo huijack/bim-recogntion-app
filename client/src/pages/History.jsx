@@ -1,6 +1,6 @@
 import {
   Filters,
-  PaginationContainer,
+  ComplexPaginationContainer,
   SectionTitle,
   SessionsList,
 } from '../components'
@@ -38,7 +38,7 @@ const History = () => {
       <SectionTitle text="past sessions" />
       <Filters />
       <SessionsList />
-      {pageCount > 1 && <PaginationContainer />}
+      {pageCount > 1 && <ComplexPaginationContainer />}
     </>
   )
 }
