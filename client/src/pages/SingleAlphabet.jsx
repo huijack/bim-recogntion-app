@@ -1,21 +1,38 @@
-import { Link, useLoaderData } from 'react-router-dom'
+import { Link, useLoaderData, useParams } from 'react-router-dom'
 import { customFetch } from '../utils'
 import { SectionTitle } from '../components'
+import { useQuery } from '@tanstack/react-query'
 
-export const loader = async ({ params }) => {
-  const { id } = params
-  try {
-    const { data } = await customFetch.get(`/alphabets/${id}`)
-    return { alphabet: data.alphabet }
-  } catch (error) {
-    console.log(error)
-    return null
+const singleAlphabetQuery = (id) => {
+  return {
+    queryKey: ['alphabet', id],
+    queryFn: async () => {
+      const { data } = await customFetch(`/alphabets/${id}`)
+      return data
+    },
   }
 }
 
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    const data = await queryClient.ensureQueryData(
+      singleAlphabetQuery(params.id)
+    )
+    return { alphabet: data.alphabet }
+  }
+
 const SingleAlphabet = () => {
-  const { alphabet } = useLoaderData()
-  const { title, image, url } = alphabet
+  const { id } = useParams()
+  const initialData = useLoaderData()
+
+  const { data } = useQuery({
+    ...singleAlphabetQuery(id),
+    initialData: initialData,
+  })
+
+  const { title, image, url } = data.alphabet
+
   return (
     <section>
       <div className="text-base breadcrumbs mb-7">

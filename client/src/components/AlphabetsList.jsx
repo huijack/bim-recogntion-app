@@ -1,8 +1,7 @@
-import { useLoaderData, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-const AlphabetsList = () => {
-  const { data } = useLoaderData()
-  const { alphabets } = data
+const AlphabetsList = ({ data }) => {
+  const { alphabets } = data.data
 
   return (
     <section className="pt-14 grid md:grid-cols-2 gap-8 justify-center items-center">

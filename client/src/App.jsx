@@ -83,13 +83,13 @@ const router = createBrowserRouter([
       {
         path: 'alphabets',
         element: <Alphabets />,
-        loader: alphabetsLoader,
+        loader: alphabetsLoader(queryClient),
         errorElement: <ErrorElement />,
       },
       {
         path: 'alphabets/:id',
         element: <SingleAlphabet />,
-        loader: singleAlphabetLoader,
+        loader: singleAlphabetLoader(queryClient),
         errorElement: <ErrorElement />,
       },
       {
