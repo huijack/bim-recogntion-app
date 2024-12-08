@@ -27,16 +27,20 @@ const HomeLayout = () => {
 
   return (
     <>
-      <Header user={user} setUser={setUser} />
-      <Navbar />
-      {isPageLoading ? (
-        <Loading />
-      ) : (
-        <section className="align-element py-20">
-          <Outlet context={{ user }} />
-        </section>
-      )}
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        <Header user={user} setUser={setUser} />
+        <Navbar />
+        <main className="flex-grow">
+          {isPageLoading ? (
+            <Loading />
+          ) : (
+            <section className="align-element py-20">
+              <Outlet context={{ user }} />
+            </section>
+          )}
+        </main>
+        <Footer />
+      </div>
     </>
   )
 }
