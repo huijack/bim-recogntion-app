@@ -54,15 +54,18 @@ const useWordGame = (initialScore) => {
 
   const checkDetectedLetter = useCallback(
     (detectedClasses) => {
-      if (
-        currentWord &&
-        !wordCompleted &&
-        detectedClasses.includes(currentWord[currentLetterIndex])
-      ) {
-        if (currentLetterIndex === currentWord.length - 1) {
-          debouncedCompletedWord.current()
-        } else {
-          setCurrentLetterIndex((prevIndex) => prevIndex + 1)
+      if (currentWord && !wordCompleted) {
+        const currentLetter = currentWord[currentLetterIndex].toLowerCase()
+        const letterMatch = detectedClasses.some(
+          (detectedClass) => detectedClass === currentLetter
+        )
+        if (letterMatch) {
+          if (currentLetterIndex === currentWord.length - 1) {
+            debouncedCompletedWord.current()
+          } else {
+            setCurrentLetterIndex((prevIndex) => prevIndex + 1)
+            toast.info(`Letter ${currentLetter} detected!`)
+          }
         }
       }
     },
